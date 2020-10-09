@@ -5,10 +5,11 @@
 // java type
 
 function takeRight(array, count) {
-  const result = [];
-  for (let i = 0; i < array.length; i++) {
-    count++;
-    result.push(array[i]);
+  if (count > array.length) {
+    return array;
   }
+  const result = array.slice((array.length - count), array.length);
+
   return result;
+
 }
