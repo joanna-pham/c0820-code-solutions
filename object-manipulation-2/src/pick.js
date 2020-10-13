@@ -2,9 +2,12 @@
 
 function pick(source, keys) {
   const result = {};
+  const tempArray = [];
   for (const prop in source) {
-    if (keys === prop) {
-      const value = source[prop];
+    for (let i = 0; i < keys.length; i++) {
+      if (keys === prop) {
+        tempArray.push(prop);
+      }
     }
   }
   return result;
