@@ -5,10 +5,8 @@ const path = require('path');
 const app = express();
 
 const absolutePath = path.join(__dirname, 'public/');
-// console.log('absolutePath', absolutePath);
 
 const staticPath = express.static(absolutePath);
-// console.log('staticPath', staticPath);
 
 app.use(staticPath);
 
