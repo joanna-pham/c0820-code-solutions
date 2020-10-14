@@ -20,6 +20,8 @@ const array = [
 const publicPath = path.join(__dirname, 'public');
 const staticPath = express.static(publicPath);
 
+app.use(staticPath);
+
 app.get('/api/grades', function (req, res) {
   res.json(array);
 });
