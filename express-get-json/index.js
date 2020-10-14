@@ -1,6 +1,6 @@
 const express = require('express');
-
 const app = express();
+const path = require('path');
 
 const array = [
   {
@@ -16,6 +16,9 @@ const array = [
     grade: 9005
   }
 ];
+
+const publicPath = path.join(__dirname, 'public');
+const staticPath = express.static(publicPath);
 
 app.get('/api/grades', function (req, res) {
   res.json(array);
