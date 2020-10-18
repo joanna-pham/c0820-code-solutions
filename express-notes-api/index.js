@@ -1,8 +1,7 @@
 const express = require('express');
 const app = express();
-const data = require('./data.json');
 const fs = require('fs');
-const { response } = require('express');
+// const { response } = require('express');
 
 const arrayJson = [];
 
@@ -10,6 +9,7 @@ const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
 app.get('/api/notes', (req, res, next) => {
+  const data = require('./data.json');
   const notesJson = data.notes; // object
   for (const prop in notesJson) {
     arrayJson.push(data.notes[prop]);
@@ -18,6 +18,7 @@ app.get('/api/notes', (req, res, next) => {
 });
 
 app.get('/api/notes/:id', (req, res, next) => {
+  const data = require('./data.json');
   const idNum = parseInt(req.params.id, 10);
   if (idNum < 1 || !idNum) {
     res.status(400).json({ error: 'id must be a positive integer' });
@@ -29,6 +30,7 @@ app.get('/api/notes/:id', (req, res, next) => {
 });
 
 app.post('/api/notes', (req, res, next) => {
+  const data = require('./data.json');
   if (!req.body.content) {
     res.status(400).json({ error: 'content is a required field' });
     return;
@@ -56,6 +58,7 @@ app.post('/api/notes', (req, res, next) => {
 });
 
 app.delete('/api/notes/:id', (req, res, next) => {
+  const data = require('./data.json');
   let dataJson = data;
 
   const idNum = parseInt(req.params.id, 10);
@@ -76,29 +79,29 @@ app.delete('/api/notes/:id', (req, res, next) => {
 });
 
 app.put('/api/notes/:id', (req, res, next) => {
-  // no valid id (positive int) or no content
-  // --400 with error property
-  // valid id and content but no matching note
-  // --404 response
-  // valid id and content but error on file
-  // --500 response
-  // valid id and content and updated successfully
-  // --200 response
+  const data = require('./data.json');
   const dataJson = data;
-
   const idNum = parseInt(req.params.id, 10);
 
-  // if (idNum === dataJson.notes[idNum].id && typeof req.body.content !== 'undefined') {
-  //   res.status(200).json(dataJson.notes[idNum]);
-  // } else {
-  //   res.status(400).json({ error: 'content is a required field' });
-  // }
-
-  if (!idNum || idNum < 1) {
-    console.log('running this');
-    res.status(400).json({ error: 'id must be a positive integer' });
+  if (idNum < 1 || !idNum) {
+    return res.status(400).json({ error: 'id must be a positive integer' });
+  }
+  if (typeof req.body.content === 'undefined') {
+    return res.status(400).json({ error: 'content is a required field' });
+  }
+  if (typeof dataJson.notes[idNum] === 'undefined') {
+    return res.status(404).json({ error: `cannot find note with id ${idNum}` });
   }
 
+  dataJson.notes[idNum].content = req.body.content;
+  const dataStringify = JSON.stringify(dataJson, null, 2);
+
+  fs.writeFile('./data.json', dataStringify, err => {
+    if (err) {
+      return res.status(500).json({ error: 'An unexpected error occurred.' });
+    }
+    return res.status(200).json(dataJson.notes[idNum]);
+  });
 });
 
 app.listen(3000, () => {
