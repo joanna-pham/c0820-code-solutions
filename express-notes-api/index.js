@@ -1,14 +1,13 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
-
-const arrayJson = [];
+const data = require('./data.json');
 
 const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
 app.get('/api/notes', (req, res, next) => {
-  const data = require('./data.json');
+  const arrayJson = [];
   const notesJson = data.notes; // object
   for (const prop in notesJson) {
     arrayJson.push(data.notes[prop]);
@@ -17,7 +16,6 @@ app.get('/api/notes', (req, res, next) => {
 });
 
 app.get('/api/notes/:id', (req, res, next) => {
-  const data = require('./data.json');
   const idNum = parseInt(req.params.id, 10);
   if (idNum < 1 || !idNum) {
     res.status(400).json({ error: 'id must be a positive integer' });
@@ -29,7 +27,6 @@ app.get('/api/notes/:id', (req, res, next) => {
 });
 
 app.post('/api/notes', (req, res, next) => {
-  const data = require('./data.json');
   if (!req.body.content) {
     res.status(400).json({ error: 'content is a required field' });
     return;
@@ -57,7 +54,6 @@ app.post('/api/notes', (req, res, next) => {
 });
 
 app.delete('/api/notes/:id', (req, res, next) => {
-  const data = require('./data.json');
   let dataJson = data;
 
   const idNum = parseInt(req.params.id, 10);
@@ -68,9 +64,9 @@ app.delete('/api/notes/:id', (req, res, next) => {
     dataJson = JSON.stringify(dataJson, null, 2);
     fs.writeFile('./data.json', dataJson, err => {
       if (err) {
-        res.status(500).json({ error: 'An unexpected error occurred.' });
+        return res.status(500).json({ error: 'An unexpected error occurred.' });
       }
-      res.sendStatus(204);
+      return res.sendStatus(204);
     });
   } else {
     res.status(404).json({ error: 'cannot find note with id ' + idNum });
@@ -78,7 +74,6 @@ app.delete('/api/notes/:id', (req, res, next) => {
 });
 
 app.put('/api/notes/:id', (req, res, next) => {
-  const data = require('./data.json');
   const dataJson = data;
   const idNum = parseInt(req.params.id, 10);
 
