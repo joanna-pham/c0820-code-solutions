@@ -1,15 +1,18 @@
 /* eslint-disable no-unused-vars */
 
+// loop though keys
+// if prop does not exist in keys, push prop to result
+
 // function omit(source, keys) {
 //   const result = {};
-//   const tempResult = {};
 //   for (let i = 0; i < keys.length; i++) {
-//     // console.log('source', source);
-//     console.log('keys[i]', keys[i]);
-//     console.log('source[keys[i]]', source[keys[i]]);
-//     if (keys[i] !== source[keys[i]]) {
-//       result[keys[i]] = source[keys[i]];
+//     const prop = keys[i];
+//     console.log('prop', prop);
+//     console.log('source', source);
+//     console.log('source[prop]', source[prop]);
+//     if (source[prop] !== prop) {
+
 //     }
-//     return result;
 //   }
+//   return result;
 // }
