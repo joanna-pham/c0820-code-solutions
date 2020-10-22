@@ -1,32 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import CustomButton from './hot-button';
 
-class CustomButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      countClick: 0
-    };
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    // make a variable called countClick set equal to this.state.countClick (find a way to copy it)
-    // ---make destructure it <...this.state.countclick>
-    this.setState({ countClick: this.state.countClick + 1 });
-  }
-
-  render() {
-    return (
-      <div>{this.state.countClick}</div>,
-      <button onClick={this.handleClick}>
-        {this.state.isClicked ? "I'M CLICKED" : 'Clicky Clicky'}
-      </button>
-    );
-  }
-}
+// const colors = [
+//   { clicks: '0', color: 'buttonDefault' },
+//   { clicks: '3', color: 'buttonThree' },
+//   { clicks: '6', color: 'buttonSix' },
+//   { clicks: '9', color: 'buttonNine' },
+//   { clicks: '12', color: 'buttonTwelve' },
+//   { clicks: '15', color: 'buttonFifteen' }
+// ];
 
 ReactDOM.render(
   <CustomButton />,
   document.querySelector('#root')
 );
+
+export default CustomButton;
