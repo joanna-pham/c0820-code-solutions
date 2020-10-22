@@ -1,0 +1,38 @@
+body {
+  text-align: center;
+}
+
+button {
+  max-width: 20%;
+  padding: 30px;
+  font-size: 20px;
+  margin: 10px;
+}
+
+.buttonDefault {
+  background-color: gray;
+}
+
+.buttonThree {
+  background-color: #33a8c7;
+}
+
+.buttonSix {
+  background-color: #52e3e1;
+}
+
+.buttonNine {
+  background-color: #a0e426;
+}
+
+.buttonTwelve {
+  background-color: #fdf148;
+}
+
+.buttonFifteen {
+  background-color: #ffab00;
+}
+
+.buttonEighteen {
+  background-color: #f77976;
+}
