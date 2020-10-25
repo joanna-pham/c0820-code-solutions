@@ -11,6 +11,7 @@ class Stopwatch extends React.Component {
     };
     this.startTimer = this.startTimer.bind(this);
     this.pauseTimer = this.pauseTimer.bind(this);
+    this.resetTimer = this.resetTimer.bind(this);
   }
 
   startTimer() {
@@ -29,12 +30,20 @@ class Stopwatch extends React.Component {
     this.setState({ isOn: false });
   }
 
+  resetTimer() {
+    this.setState({
+      time: 0
+    });
+  }
+
   render() {
 
     return (
       <div>
         <div className="timer">
-          <h1>{this.state.time}</h1>
+          {this.state.isOn === false
+            ? <div onClick={this.resetTimer}><h1>{this.state.time}</h1></div>
+            : <h1>{this.state.time}</h1>}
         </div>
         <div className="icon">
           {!this.state.isOn
@@ -52,6 +61,6 @@ class Stopwatch extends React.Component {
 }
 
 ReactDOM.render(
-  <Stopwatch/>,
+  <Stopwatch />,
   document.querySelector('#root')
 );
