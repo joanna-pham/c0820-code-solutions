@@ -1,0 +1,17 @@
+.error-message {
+  color: red;
+  font-size: 15px;
+}
+
+.icon-image {
+  display: inline;
+  margin-left: 5px;
+}
+
+.fa-times {
+  color: red;
+}
+
+.fa-check {
+  color: green;
+}
