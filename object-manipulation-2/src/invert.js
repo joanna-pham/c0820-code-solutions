@@ -7,9 +7,3 @@ function invert(source) {
   }
   return result;
 }
-
-// result[value] = key
-
-// key and value
-// key = key value = value
-// invert key = value value = key
