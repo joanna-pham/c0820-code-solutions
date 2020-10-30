@@ -18,11 +18,6 @@ class App extends React.Component {
   }
 
   getAllTodos() {
-    /**
-     * Use fetch to send a GET request to `/api/todos`.
-     * Then 😉, once the response JSON is received and parsed,
-     * update state with the received todos.
-     */
     fetch('./api/todos')
       .then(res => res.json())
       .then(todo => this.setState({ todos: todo }))
@@ -30,68 +25,68 @@ class App extends React.Component {
   }
 
   addTodo(newTodo) {
-    /**
-     * Use fetch to send a POST request to `/api/todos`.
-     * Then 😉, once the response JSON is received and parsed,
-     * add the created todo to the state array.
-     *
-     * TIP: Be sure to SERIALIZE the todo in the body with JSON.stringify()
-     * And specify the "Content-Type" header as "application/json"
-     */
-
     fetch('/api/todos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: 'todo'
+        task: newTodo.task,
+        isCompleted: newTodo.isCompleted
       })
     }).then(res => res.json())
-      .then(data => this.setState({
-        todos: newTodo
-      }))
+      .then(data => {
+        const todoArray = this.state.todos;
+        todoArray.slice(data);
+        todoArray.push(data);
+        this.setState({
+          todos: todoArray
+        });
+      })
       .catch(error => console.error(error));
   }
 
   toggleCompleted(todoId) {
-    /**
-     * Find the index of the matching todo in the state array.
-     * Find its "isCompleted" status.
-     * Make a new Object containing the opposite "isCompleted" status.
-     * Use fetch to send a PATCH request to `/api/todos/${todoId}`
-     * Then 😉, once the response JSON is received and parsed,
-     * replace the old todo in state.
-     *
-     * TIP: Be sure to SERIALIZE the updates in the body with JSON.stringify()
-     * And specify the "Content-Type" header as "application/json"
-     */
-
     const arrayJson = [];
 
     const todosArray = this.state.todos;
+    let targetIndex = null;
+    let targetTodo = null;
 
     for (const prop in todosArray) {
       if (todoId === todosArray[prop].id) {
-        const newCompleted = {
-          isCompleted: !this.state.isCompleted
-        };
-        todosArray[prop].isCompleted = newCompleted;
-        arrayJson.push(this.state.todos);
+        targetIndex = todosArray[prop].id;
+        targetTodo = prop;
+
+        // const newCompleted = {
+        //   isCompleted: !targetTodo.isCompleted
+        // };
+        // todosArray[prop].isCompleted = newCompleted;
+        // arrayJson.push(this.state.todos);
         break;
       }
     }
+
+    const isCompleted = targetTodo.isCompleted;
+    const update = {};
+    update.isCompleted = !isCompleted;
 
     fetch(`/api/todos/${todoId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        isCompleted: !this.state.isCompleted
-      })
+      body: JSON.stringify(update)
     }).then(res => res.json())
-      .then(todo => this.setState({ todos: this.state.todos }))
+      .then(todo => {
+        console.log('todo', todo);
+        const todoArray = this.state.todos.slice();
+        // todoArray.slice(todo);
+        todoArray[targetIndex] = todo;
+        this.setState({
+          todos: todoArray
+        });
+      })
       .catch(error => console.error(error));
   }
 
