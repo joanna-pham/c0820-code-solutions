@@ -47,27 +47,11 @@ class App extends React.Component {
   }
 
   toggleCompleted(todoId) {
-    const arrayJson = [];
-
     const todosArray = this.state.todos;
-    let targetIndex = null;
-    let targetTodo = null;
+    const targetIndex = todosArray.findIndex(todo => todo.id === todoId);
+    const findId = todosArray[targetIndex];
+    const isCompleted = findId.isCompleted;
 
-    for (const prop in todosArray) {
-      if (todoId === todosArray[prop].id) {
-        targetIndex = todosArray[prop].id;
-        targetTodo = prop;
-
-        // const newCompleted = {
-        //   isCompleted: !targetTodo.isCompleted
-        // };
-        // todosArray[prop].isCompleted = newCompleted;
-        // arrayJson.push(this.state.todos);
-        break;
-      }
-    }
-
-    const isCompleted = targetTodo.isCompleted;
     const update = {};
     update.isCompleted = !isCompleted;
 
@@ -79,9 +63,7 @@ class App extends React.Component {
       body: JSON.stringify(update)
     }).then(res => res.json())
       .then(todo => {
-        console.log('todo', todo);
         const todoArray = this.state.todos.slice();
-        // todoArray.slice(todo);
         todoArray[targetIndex] = todo;
         this.setState({
           todos: todoArray
