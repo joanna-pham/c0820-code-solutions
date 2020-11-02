@@ -1,13 +1,9 @@
 const pg = require('pg');
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// parse application/json
-app.use(bodyParser.json());
+const jsonMiddleware = express.json();
+app.use(jsonMiddleware);
 
 // when using pg package, create database connection (ONLY ONE pool for whole server)
 const db = new pg.Pool({
@@ -145,7 +141,7 @@ app.delete('/api/grades/:gradeId', (req, res, next) => {
 
 });
 
-app.listen(3000, () => {
+app.listen(8081, () => {
   // eslint-disable-next-line no-console
   console.log('Listening on 3000');
 });
