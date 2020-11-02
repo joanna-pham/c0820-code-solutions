@@ -69,35 +69,27 @@ app.put('/api/grades/:gradeId', (req, res, next) => {
     });
   }
 
-  const selectSql = `
-    select "grade"
-      from "grades"
-      where "gradeId" = $1
+  const sql = `
+    update "grades"
+      set "grade" = $1
+      where "gradeId" = $2
+      returning "gradeId", "name", "course", "grade"
   `;
 
-  const selectValues = [req.params.gradeId];
+  const values = [req.body.grade, req.params.gradeId];
 
-  db.query(selectSql, selectValues)
+  db.query(sql, values)
     .then(result => {
       if (result.rowCount === 0) {
         return res.status(404).json({ error: `"gradeId" ${gradeId} does not exist in the database` });
+      } else {
+        res.status(200).json(result.rows[0]);
       }
 
-      const sql = `
-        update "grades"
-          set "grade" = $1
-          where "gradeId" = $2
-          returning "gradeId", "name", "course", "grade"
-        `;
-
-      const values = [req.body.grade, req.params.gradeId];
-
-      db.query(sql, values)
-        .then(result => res.status(200).json(result.rows[0]))
-        .catch(err => {
-          console.error(err);
-          res.status(500).json({ error: 'An unexpected error occurred.' });
-        });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'An unexpected error occurred.' });
     });
 });
 
@@ -110,38 +102,28 @@ app.delete('/api/grades/:gradeId', (req, res, next) => {
     });
   }
 
-  const selectSql = `
-    select "grade"
-      from "grades"
+  const sql = `
+    delete from "grades"
       where "gradeId" = $1
   `;
 
-  const selectValues = [req.params.gradeId];
+  const values = [req.params.gradeId];
 
-  db.query(selectSql, selectValues)
+  db.query(sql, values)
     .then(result => {
       if (result.rowCount === 0) {
         return res.status(404).json({ error: `"gradeId" ${gradeId} does not exist in the database` });
+      } else {
+        res.status(200).json(result.rows[0]);
       }
-
-      const sql = `
-        delete from "grades"
-          where "gradeId" = $1
-        `;
-
-      const values = [req.params.gradeId];
-
-      db.query(sql, values)
-        .then(result => res.status(200).json())
-        .catch(err => {
-          console.error(err);
-          res.status(500).json({ error: 'An unexpected error occurred.' });
-        });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'An unexpected error occurred.' });
     });
-
 });
 
-app.listen(8081, () => {
+app.listen(3000, () => {
   // eslint-disable-next-line no-console
   console.log('Listening on 3000');
 });
